@@ -5,6 +5,7 @@
     <string name="add_text">Add Text</string>
     <string name="save">Save</string>
     <string name="share">Share</string>
+    <string name="shareGeo">Share to GeoPrints</string>
 
     <string name="select_color">Select color</string>
     <string name="ok">OK</string>
