@@ -84,37 +84,39 @@ public class StickersRVAdapter extends RecyclerView.Adapter<StickersRVAdapter.Vi
         holder.stickerStats.setAnimationDuration(2000)
                 .countAnimation(0, n);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(context, "Recycle Click" + position, Toast.LENGTH_SHORT).show();
-                //Start Activity here
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference storageRef = storage.getReference();
-
-                storageRef.child("test1.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        // Got the download URL for 'users/me/profile.png'
-                        urls.add("https://firebasestorage.googleapis.com/"+uri.getPath()+"?alt=media");
-                        Log.d("url",uri.getPath());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        // Handle any errors
-                    }
-                });
-
-                ZGrid.with(((MainActivity)context), urls)
-                        .setToolbarColorResId(R.color.colorPrimary) // toolbar color
-                        .setTitle("Zak Gallery") // toolbar title
-                        .setToolbarTitleColor(ZColor.WHITE) // toolbar title color
-                        .setSpanCount(3) // colums count
-                        .setGridImgPlaceHolder(R.color.colorPrimary) // color placeholder for the grid image until it loads
-                        .show();
-            }
-        });
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(context, "Recycle Click" + position, Toast.LENGTH_SHORT).show();
+//                //Start Activity here
+//                FirebaseStorage storage = FirebaseStorage.getInstance();
+//                StorageReference storageRef = storage.getReference();
+//
+//                storageRef.child("test1.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        // Got the download URL for 'users/me/profile.png'
+//                        urls.add("https://firebasestorage.googleapis.com/"+uri.getPath()+"?alt=media");
+//                        Log.d("url",uri.getPath());
+//                        urls.add("http://static0.passel.co/wp-content/uploads/2016/08/05110349/20160731-igor-trepeshchenok-barnimages-08-768x509.jpg");
+//                        ZGrid.with(((MainActivity)context), urls)
+//                                .setToolbarColorResId(R.color.colorPrimary) // toolbar color
+//                                .setTitle("Zak Gallery") // toolbar title
+//                                .setToolbarTitleColor(ZColor.WHITE) // toolbar title color
+//                                .setSpanCount(3) // colums count
+//                                .setGridImgPlaceHolder(R.color.colorPrimary) // color placeholder for the grid image until it loads
+//                                .show();
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle any errors
+//                    }
+//                });
+//
+//
+//            }
+//        });
 
     }
 
