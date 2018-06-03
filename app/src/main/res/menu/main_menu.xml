@@ -30,4 +30,11 @@
         android:title="@string/share"
         app:showAsAction="ifRoom"
         />
+
+    <item
+        android:id="@+id/shareGeo"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="@string/shareGeo"
+        app:showAsAction="ifRoom"
+        />
 </menu>

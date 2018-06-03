@@ -296,6 +296,31 @@ public class ImageActivity extends AppCompatActivity implements TextEditorDialog
             Intent intent = new Intent(this, AgreementActivity.class);
             intent.putIntegerArrayListExtra("usedStickers", usedStickers);
             startActivityForResult(intent, SHARE_REQUEST);
+        } else if (item.getItemId() == R.id.shareGeo) {
+            Bitmap bitmap = motionView.getThumbnailImage();
+            for(int sticker: usedStickers){
+                StorageReference mountainsRef = storageRef.child(sticker+"/"+userid+".jpg");
+                imageView.setDrawingCacheEnabled(true);
+                imageView.buildDrawingCache();
+                Bitmap bitmap = imageView.getDrawingCache();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+
+                UploadTask uploadTask = mountainsRef.putBytes(data);
+                uploadTask.addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    }
+                });
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -322,6 +347,22 @@ public class ImageActivity extends AppCompatActivity implements TextEditorDialog
 
     private void shareImage(Bitmap bitmap) {
         // save bitmap to cache directory
+        Uri contentUri = getUri(bitmap);
+
+        if (contentUri != null) {
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND );
+            shareIntent.putExtra(Intent.EXTRA_TEXT, StickerSelectActivity.getCaption(usedStickers));
+            shareIntent.setType("text/plain");
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+            shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
+            shareIntent.setType("image/png");
+            startActivity(Intent.createChooser(shareIntent, "Choose an app"));
+        }
+    }
+
+    private Uri getUri(Bitmap bitmap) {
         try {
             File cachePath = new File(this.getCacheDir(), "images");
             cachePath.mkdirs(); // don't forget to make the directory
@@ -334,17 +375,7 @@ public class ImageActivity extends AppCompatActivity implements TextEditorDialog
         }
         File imagePath = new File(this.getCacheDir(), "images");
         File newFile = new File(imagePath, "image.png");
-        Uri contentUri = FileProvider.getUriForFile(this, "com.mvc.imagepicker.provider", newFile);
-
-        if (contentUri != null) {
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
-            shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
-            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
-            shareIntent.setType("image/png");
-            startActivity(Intent.createChooser(shareIntent, "Choose an app"));
-        }
+        return FileProvider.getUriForFile(this, "com.mvc.imagepicker.provider", newFile);
     }
 
     protected void addTextSticker() {

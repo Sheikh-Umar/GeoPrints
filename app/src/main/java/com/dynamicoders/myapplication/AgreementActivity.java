@@ -21,7 +21,7 @@ public class AgreementActivity extends AppCompatActivity {
         TextView pledges = findViewById(R.id.pledges);
         StringBuilder builder = new StringBuilder();
         for(Integer id : usedStickers)
-            builder.append("\u2022 "+id.toString()+"\n");
+            builder.append("\u2022 "+StickerSelectActivity.hm.get(id)+"\n");
         pledges.setText(builder.toString());
     }
 

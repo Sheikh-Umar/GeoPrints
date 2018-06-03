@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daasuu.cat.CountAnimationTextView;
+import com.mzelzoghbi.zgallery.ZGrid;
+import com.mzelzoghbi.zgallery.entities.ZColor;
 
 import java.util.Random;
 
@@ -56,7 +59,7 @@ public class StickersRVAdapter extends RecyclerView.Adapter<StickersRVAdapter.Vi
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         String name = "No. of people who have pledged to \n" + StickerSelectActivity.hm.get(mDataset[position]);
@@ -70,6 +73,21 @@ public class StickersRVAdapter extends RecyclerView.Adapter<StickersRVAdapter.Vi
 
         holder.stickerStats.setAnimationDuration(2000)
                 .countAnimation(0, n);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, "Recycle Click" + position, Toast.LENGTH_SHORT).show();
+                //Start Activity here
+                ZGrid.with(this, /*your string arraylist of image urls*/)
+                        .setToolbarColorResId(R.color.colorPrimary) // toolbar color
+                        .setTitle("Zak Gallery") // toolbar title
+                        .setToolbarTitleColor(ZColor.WHITE) // toolbar title color
+                        .setSpanCount(3) // colums count
+                        .setGridImgPlaceHolder(R.color.colorPrimary) // color placeholder for the grid image until it loads
+                        .show();
+            }
+        });
 
     }
 

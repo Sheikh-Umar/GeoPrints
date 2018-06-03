@@ -35,4 +35,5 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     compile 'jp.wasabeef:recyclerview-animators:2.3.0'
     compile 'com.yqritc:recyclerview-flexibledivider:1.4.0'
+    compile 'com.github.mzelzoghbi:zgallery:0.3'
 }

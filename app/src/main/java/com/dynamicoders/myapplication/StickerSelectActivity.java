@@ -84,16 +84,27 @@ public class StickerSelectActivity extends AppCompatActivity {
     static {
 
         // Put elements to the map
-        hm.put(R.drawable.picture1,"USE MORE NATURAL LIGHT");
-        hm.put(R.drawable.picture2,"INCREASE AIR-CON TEMPERATURE");
-        hm.put(R.drawable.picture3,"SWITCH APPLIANCES OFF WHEN NOT IN USE");
-        hm.put(R.drawable.picture4,"WASH CLOTHES ON A FULL LOAD");
-        hm.put(R.drawable.picture5,"TURN OFF THE TAP WHEN BRUSHING TEETH");
-        hm.put(R.drawable.picture6,"TAKE SHORTER SHOWERS");
-        hm.put(R.drawable.picture7,"BRING REUSABLE SHOPPING BAGS");
-        hm.put(R.drawable.picture8,"CHOOSE PRODUCTS WITH MINIMAL PACKAGING");
-        hm.put(R.drawable.picture9,"SAY NO TO PLASTIC STRAWS");
-        hm.put(R.drawable.picture10,"WALK OR CYCLE OVER SHORT DISTANCES");
+        hm.put(R.drawable.picture2,"USE MORE NATURAL LIGHT");
+        hm.put(R.drawable.picture3,"INCREASE AIR-CON TEMPERATURE");
+        hm.put(R.drawable.picture4,"SWITCH APPLIANCES OFF WHEN NOT IN USE");
+        hm.put(R.drawable.picture5,"WASH CLOTHES ON A FULL LOAD");
+        hm.put(R.drawable.picture6,"TURN OFF THE TAP WHEN BRUSHING TEETH");
+        hm.put(R.drawable.picture7,"TAKE SHORTER SHOWERS");
+        hm.put(R.drawable.picture8,"BRING REUSABLE SHOPPING BAGS");
+        hm.put(R.drawable.picture9,"CHOOSE PRODUCTS WITH MINIMAL PACKAGING");
+        hm.put(R.drawable.picture10,"SAY NO TO PLASTIC STRAWS");
+        hm.put(R.drawable.picture1,"WALK OR CYCLE OVER SHORT DISTANCES");
+    }
+
+    public static String getCaption(ArrayList<Integer> stickers) {
+        StringBuilder caption = new StringBuilder();
+
+        caption.append("Today, I have made a pledge to:\n");
+        for(Integer sticker: stickers) {
+            caption.append("\u2022 " + hm.get(sticker) + "\n");
+        }
+        caption.append("\nAre you going to join me on the fight against climate change? Take a #GeoPrint now and share it on your social media! #ClimateActionSG");
+        return caption.toString();
     }
 
     @Override
