@@ -26,6 +26,7 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,6 +43,13 @@ import com.dynamicoders.myapplication.widget.MotionView;
 import com.dynamicoders.myapplication.widget.entity.ImageEntity;
 import com.dynamicoders.myapplication.widget.entity.MotionEntity;
 import com.dynamicoders.myapplication.widget.entity.TextEntity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class ImageActivity extends AppCompatActivity implements TextEditorDialogFragment.OnTextLayerCallback {
 
@@ -298,11 +306,13 @@ public class ImageActivity extends AppCompatActivity implements TextEditorDialog
             startActivityForResult(intent, SHARE_REQUEST);
         } else if (item.getItemId() == R.id.shareGeo) {
             Bitmap bitmap = motionView.getThumbnailImage();
+            FirebaseAuth firebaseAuth;
+            firebaseAuth = FirebaseAuth.getInstance();
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
             for(int sticker: usedStickers){
-                StorageReference mountainsRef = storageRef.child(sticker+"/"+userid+".jpg");
-                imageView.setDrawingCacheEnabled(true);
-                imageView.buildDrawingCache();
-                Bitmap bitmap = imageView.getDrawingCache();
+                StorageReference mountainsRef = storageRef.child(sticker+"/"+ user.getUid()+".jpg");
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] data = baos.toByteArray();
@@ -311,13 +321,12 @@ public class ImageActivity extends AppCompatActivity implements TextEditorDialog
                 uploadTask.addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception exception) {
-                        // Handle unsuccessful uploads
                     }
                 }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                        Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
                     }
                 });
             }

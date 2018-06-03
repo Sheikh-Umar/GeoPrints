@@ -2,7 +2,10 @@ package com.dynamicoders.myapplication;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +14,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daasuu.cat.CountAnimationTextView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mzelzoghbi.zgallery.ZGrid;
 import com.mzelzoghbi.zgallery.entities.ZColor;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class StickersRVAdapter extends RecyclerView.Adapter<StickersRVAdapter.ViewHolder> {
     private int[] mDataset;
     private LayoutInflater inflater;
     private Context context;
+    private ArrayList<String> urls = new ArrayList<>();
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -79,7 +89,24 @@ public class StickersRVAdapter extends RecyclerView.Adapter<StickersRVAdapter.Vi
             public void onClick(View view) {
                 Toast.makeText(context, "Recycle Click" + position, Toast.LENGTH_SHORT).show();
                 //Start Activity here
-                ZGrid.with(this, /*your string arraylist of image urls*/)
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReference();
+
+                storageRef.child("test1.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        // Got the download URL for 'users/me/profile.png'
+                        urls.add("https://firebasestorage.googleapis.com/"+uri.getPath()+"?alt=media");
+                        Log.d("url",uri.getPath());
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
+
+                ZGrid.with(((MainActivity)context), urls)
                         .setToolbarColorResId(R.color.colorPrimary) // toolbar color
                         .setTitle("Zak Gallery") // toolbar title
                         .setToolbarTitleColor(ZColor.WHITE) // toolbar title color
